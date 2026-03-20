@@ -1,0 +1,21 @@
+---
+name: Check for broken links
+
+on: [pull_request]
+
+jobs:
+  htmlproofer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1
+          bundler-cache: true
+      - name: Build Jekyll site
+        run: bundle exec jekyll build
+      - name: Check links with HTMLProofer
+        run: |
+          bundle exec htmlproofer ./_site \
+            --disable-external \
+            --ignore-urls "/^#/"
